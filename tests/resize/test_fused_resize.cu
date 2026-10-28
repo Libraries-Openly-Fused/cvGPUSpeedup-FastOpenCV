@@ -179,7 +179,7 @@ int launch() {
         constexpr uint NUM_ELEMS_X = 7680;
         constexpr uint NUM_ELEMS_Y = 4320;
         testComputeWhatYouSee(buffer, NUM_ELEMS_X, NUM_ELEMS_Y);
-        delete buffer;
+        delete[] buffer;
     } else {
         // Print an error message if the file cannot be opened
         std::cout << "Cannot open file, using dummy image." << std::endl;
@@ -190,18 +190,19 @@ int launch() {
     }
     file.close();
 
-    const std::string filePath2{ "" };
+    // A 3840x2160 NV12 frame (3840 * 2160 * 3 / 2 bytes)
+    const std::string filePath2{ getSourceDir() + "/images/output.nv12" };
     std::ifstream file2(filePath2, std::ios::binary | std::ios::ate);
     std::streamsize size2 = file2.tellg();
     file2.seekg(0, std::ios::beg);
 
-    if (file2.is_open()) {
+    if (file2.is_open() && size2 == 3840 * (2160 + (2160 / 2))) {
         char* buffer = new char[size2];
         file2.read(buffer, size2);
         constexpr uint NUM_ELEMS_X = 3840;
         constexpr uint NUM_ELEMS_Y = 2160;
         testComputeWhatYouSeePlusHorizontalFusion(buffer, NUM_ELEMS_X, NUM_ELEMS_Y);
-        delete buffer;
+        delete[] buffer;
     } else {
         constexpr uint NUM_ELEMS_X = 3840;
         constexpr uint NUM_ELEMS_Y = 2160;

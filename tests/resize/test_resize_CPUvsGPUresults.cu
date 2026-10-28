@@ -18,16 +18,17 @@
 #include <opencv2/cudaarithm.hpp>
 #include <opencv2/opencv.hpp>
 #include <cvGPUSpeedup.cuh>
+#include "tests/testsCommon.cuh"
 
 int launch() {
     cv::cuda::Stream cv_stream;
 
-    // Load the PNG file
-    const std::string filePath{ "" };
+    // Load the PNG file: a 2395x984 RGBA image, so the resize to 1920x1080 shrinks X and enlarges Y
+    const std::string filePath{ getSourceDir() + "/images/NsightSystemsTimeline2.png" };
     cv::Mat image = cv::imread(filePath.c_str(), cv::IMREAD_UNCHANGED);
 
-    // Check if the image was loaded successfully
-    if (image.empty())
+    // Check if the image was loaded successfully, as the CV_8UC4 image the resize below expects
+    if (image.empty() || image.type() != CV_8UC4)
     {
         std::cerr << "test_resize_CPUvsGPUresults SKIPPED. No valid image file path probided." << std::endl;
         return 0;
