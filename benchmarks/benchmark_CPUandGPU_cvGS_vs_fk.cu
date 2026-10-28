@@ -125,7 +125,8 @@ bool test_cvGS_VS_fk_CPU_and_GPU(cv::cuda::Stream& cv_stream, bool enabled) {
 
             const auto resizeOp = PixelReadOp::build(fk_crops).then(fk::Resize<IType, AR>::build(fk_size, backgroundValue));
 
-            fk::executeOperations<fk::TransformDPP<fk::ParArch::GPU_NVIDIA>>(fk::Stream_<fk::ParArch::GPU_NVIDIA>(cv::cuda::StreamAccessor::getStream(cv_stream)),
+            fk::Stream_<fk::ParArch::GPU_NVIDIA> fk_stream(cv::cuda::StreamAccessor::getStream(cv_stream));
+            fk::executeOperations<fk::TransformDPP<fk::ParArch::GPU_NVIDIA>>(fk_stream,
                 resizeOp,
                 fk::Unary<fk::ColorConversion<fk::ColorConversionCodes::COLOR_RGB2BGR, float3, float3>>{},
                 fk::Binary<fk::Mul<float3>>{fk_val_alpha},
