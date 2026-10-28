@@ -25,6 +25,13 @@
 #include <opencv2/core/cuda_stream_accessor.hpp>
 #include <opencv2/cudaarithm.hpp>
 
+// Root directory of the cvGPUSpeedup sources, found from the location of this file (tests/testsCommon.cuh)
+inline std::string getSourceDir() {
+    const std::string filePath = __FILE__;
+    const std::string testsDir = filePath.substr(0, filePath.find_last_of("/\\"));
+    return testsDir.substr(0, testsDir.find_last_of("/\\"));
+}
+
 template <size_t START_VALUE, size_t INCREMENT, std::size_t... Is>
 constexpr std::array<size_t, sizeof...(Is)> generate_sequence(std::index_sequence<Is...>) {
     return std::array<size_t, sizeof...(Is)>{(START_VALUE + (INCREMENT * Is))...};
