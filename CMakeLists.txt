@@ -34,8 +34,3 @@ if (${BUILD_UTEST})
     add_subdirectory(tests)    
 endif()
 
-
-if (${ENABLE_BENCHMARK})
-    enable_testing()
-    add_subdirectory(benchmarks)
-endif()
